@@ -1,4 +1,4 @@
-#include "iniparser.h"
+#include "../include/iniparser.h"
 
 const std::string INIConfig::Parser::P_SECTION = R"(\[{1,1}(.+)\]{1,1})";
 const std::string INIConfig::Parser::P_ROW = R"((?:\;|\#)*([a-z0-9_\-\+\.]+)?(?:\[\])?(?:[ ]*)\=(?:[ ]*)(.*))";
