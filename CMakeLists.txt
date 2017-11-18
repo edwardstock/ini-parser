@@ -9,5 +9,5 @@ add_library(iniparser ${SOURCE_FILES})
 target_link_libraries(iniparser toolboxpp)
 
 
-add_executable(dev main.cpp)
-target_link_libraries(dev iniparser)
+#add_executable(dev main.cpp)
+#target_link_libraries(dev iniparser)
