@@ -99,7 +99,11 @@ INIConfig::Row *INIConfig::Parser::getRow(const std::string &name) const {
 }
 INIConfig::Section *INIConfig::Parser::getSection(const std::string &name) const {
     if (!hasSection(name)) {
-        return nullptr;
+        if (!hasSection("__default__")) {
+            sections["__default__"] = new Section("__default__");
+        }
+
+        return sections.at("__default__");
     }
 
     return sections.at(name);
@@ -216,6 +220,20 @@ u_long INIConfig::Row::getLine() const {
 INIConfig::Value INIConfig::Row::getValue() const {
     if (value.empty()) {
         return nullptr;
+    }
+
+    return value[0];
+}
+INIConfig::Value INIConfig::Row::getValue(std::string &defaultVal) {
+    if (value.empty()) {
+        return Value(defaultVal);
+    }
+
+    return value[0];
+}
+INIConfig::Value INIConfig::Row::getValue(std::string &&defaultVal) {
+    if (value.empty()) {
+        return Value(std::move(defaultVal));
     }
 
     return value[0];
@@ -364,5 +382,18 @@ INIConfig::Row *INIConfig::Section::getRow(const std::string &key) {
         }
     }
 
-    return nullptr;
+    Value emptyValue;
+    rows.emplace_back(key, std::move(emptyValue), 0);
+    return getRow(key);
+}
+INIConfig::Row *INIConfig::Section::getRow(const std::string &key, std::string &&defValue) {
+    for (auto &r: rows) {
+        if (r.getKey() == key) {
+            return &r;
+        }
+    }
+
+    Value nValue(defValue);
+    rows.emplace_back(key, std::move(nValue), 0);
+    return getRow(key);
 }

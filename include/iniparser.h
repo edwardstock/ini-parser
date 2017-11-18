@@ -79,6 +79,8 @@ class Row {
     std::string getKey() const;
     u_long getLine() const;
     Value getValue() const;
+    Value getValue(std::string &defaultVal);
+    Value getValue(std::string &&defaultVal);
     std::vector<Value> getValues() const;
 
  private:
@@ -111,6 +113,7 @@ class Section {
 
     Row *getRow(const Row &anotherRow);
     Row *getRow(const std::string &key);
+    Row *getRow(const std::string &key, std::string &&defValue);
 
  private:
     std::string name;
@@ -120,7 +123,7 @@ class Section {
 class Parser {
 
  private:
-    std::unordered_map<std::string, Section *> sections;
+    mutable std::unordered_map<std::string, Section *> sections;
     std::unordered_map<std::string, Row *> rows;
 
     /**
