@@ -17,3 +17,8 @@ install(
 	FILES ${PUBLIC_HEADERS}
 	DESTINATION include/${PROJECT}
 )
+
+if (ENABLE_DEV)
+	add_executable(dev main.cpp)
+	target_link_libraries(dev iniparser)
+endif ()

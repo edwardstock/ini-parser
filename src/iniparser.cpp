@@ -116,6 +116,15 @@ INIConfig::Value INIConfig::Parser::getValue(const std::string &name) const {
 
     return getRow(name)->getValue();
 }
+
+INIConfig::Value INIConfig::Parser::getValue(const std::string &name, std::string &&defaultValue) const {
+    if (getRow(name) == nullptr) {
+        return Value(std::move(defaultValue));
+    }
+
+    return getRow(name)->getValue();
+
+}
 void INIConfig::Parser::dump(std::ostream &out) {
     for (auto &s: sections) {
         out << "[" << s.second->getName() << "]" << std::endl;
@@ -214,8 +223,12 @@ INIConfig::Value INIConfig::Row::getValue() const {
 std::vector<INIConfig::Value> INIConfig::Row::getValues() const {
     return value;
 }
+INIConfig::Value::Value(std::string &&value)
+    : value(value) {
+}
 INIConfig::Value::Value(std::string &value)
     : value(std::move(value)) {
+
 }
 INIConfig::Value::Value(const char *value)
     : value(std::string(value)) {

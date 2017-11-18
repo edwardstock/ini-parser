@@ -24,6 +24,7 @@ namespace INIConfig {
 
 class Value {
  public:
+    Value(std::string &&value);
     Value(std::string &value);
     Value(const char *value);
     Value();
@@ -155,6 +156,7 @@ class Parser {
 
     Value getValue(const std::string &section, const std::string &key) const;
     Value getValue(const std::string &name) const;
+    Value getValue(const std::string &name, std::string &&defaultValue) const;
 
     void dump(std::ostream &out);
     void dump();
