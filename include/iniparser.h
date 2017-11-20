@@ -113,7 +113,31 @@ class Section {
 
     Row *getRow(const Row &anotherRow);
     Row *getRow(const std::string &key);
-    Row *getRow(const std::string &key, std::string &&defValue);
+    Row *getRow(const std::string &key, const char *defValue) {
+        for (auto &r: rows) {
+            if (r.getKey() == key) {
+                return &r;
+            }
+        }
+
+        Value nValue(defValue);
+        rows.emplace_back(key, std::move(nValue), 0);
+        return getRow(key);
+    }
+    template<typename T>
+    Row *getRow(const std::string &key, T defValue) {
+        static_assert(std::is_fundamental<T>::value, "Type must be primitive");
+
+        for (auto &r: rows) {
+            if (r.getKey() == key) {
+                return &r;
+            }
+        }
+
+        Value nValue(std::to_string(defValue));
+        rows.emplace_back(key, std::move(nValue), 0);
+        return getRow(key);
+    }
 
  private:
     std::string name;

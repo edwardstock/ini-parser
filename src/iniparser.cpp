@@ -316,7 +316,7 @@ bool INIConfig::Value::operator==(const std::string &s) {
     return std::equal(s.cbegin(), s.end(), in.cbegin(), in.cend());
 }
 INIConfig::Section::Section(const std::string &n)
-    : name(std::move(n)) {
+    : name(n) {
 }
 INIConfig::Section::~Section() {
     rows.clear();
@@ -386,14 +386,4 @@ INIConfig::Row *INIConfig::Section::getRow(const std::string &key) {
     rows.emplace_back(key, std::move(emptyValue), 0);
     return getRow(key);
 }
-INIConfig::Row *INIConfig::Section::getRow(const std::string &key, std::string &&defValue) {
-    for (auto &r: rows) {
-        if (r.getKey() == key) {
-            return &r;
-        }
-    }
 
-    Value nValue(defValue);
-    rows.emplace_back(key, std::move(nValue), 0);
-    return getRow(key);
-}
